@@ -1,0 +1,3 @@
+packages:
+  - git: "https://github.com/medic/cht-pipeline.git"
+    revision: main
