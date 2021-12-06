@@ -10,4 +10,4 @@ RUN apt-get update \
 WORKDIR /dbt/
 COPY . .
 
-CMD ["bash", "-c", "/dbt/dbt-run.sh"]
+CMD ["python3", "/dbt/dbt-run.py"]
