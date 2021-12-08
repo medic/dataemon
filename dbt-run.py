@@ -21,7 +21,6 @@ if conn is None:
 
 cur = conn.cursor()
 
-cur.execute(f"CREATE SCHEMA IF NOT EXISTS {os.getenv('POSTGRES_SCHEMA')} AUTHORIZATION {os.getenv('POSTGRES_USER')}")
 cur.execute(f"""
     CREATE TABLE IF NOT EXISTS {os.getenv('POSTGRES_SCHEMA')}._dataemon (
         inserted_on TIMESTAMP DEFAULT NOW(),

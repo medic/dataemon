@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt-get remove -y python-cffi \
     && pip install --upgrade cffi \
     && pip install cryptography~=3.4 \
-    && pip install dbt
+    && pip install dbt-core dbt-postgres
 
 WORKDIR /dbt/
 COPY . .
