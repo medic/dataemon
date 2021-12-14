@@ -1,4 +1,11 @@
-FROM ubuntu
+FROM python:3 AS testing
+
+RUN pip install flake8
+COPY . .
+
+RUN flake8 dbt-run.py
+
+FROM ubuntu AS release
 
 RUN apt-get update \
     && apt-get install -y git libpq-dev python-dev python3-pip postgresql-client \
