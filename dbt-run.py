@@ -30,39 +30,36 @@ cur = conn.cursor()
 cur.execute(f"""
     CREATE TABLE IF NOT EXISTS {os.getenv('POSTGRES_SCHEMA')}._dataemon (
         inserted_on TIMESTAMP DEFAULT NOW(),
-        package_url TEXT,
-        package_version TEXT
+        packages jsonb
     )
 """)
 
 init_package = urlparse(os.getenv("DATAEMON_INITAL_PACKAGE"))
 if init_package.scheme in ["http", "https"]:
     cur.execute(
-        f"INSERT INTO {os.getenv('POSTGRES_SCHEMA')}._dataemon VALUES "
-        f"(NOW(), '{init_package._replace(fragment='').geturl()}', "
-        f"'{init_package.fragment}')"
+        f"INSERT INTO {os.getenv('POSTGRES_SCHEMA')}._dataemon "
+        "(packages) VALUES (%s)",
+        [json.dumps({
+            "packages": [
+                {
+                    "git": init_package._replace(fragment='').geturl(),
+                    "revision": init_package.fragment
+                }
+            ]
+        })]
     )
+    conn.commit()
 
 
 while True:
     cur.execute(f"""
-        SELECT DISTINCT ON (
-            package_url, package_version) package_url, package_version
+        SELECT packages
         FROM {os.getenv('POSTGRES_SCHEMA')}._dataemon
-        ORDER BY package_url, package_version, inserted_on DESC NULLS LAST
+        ORDER BY inserted_on DESC
     """)
-    packages = {
-        "packages": [
-            {
-                "git": package_url,
-                "revision": package_version
-            }
-            for package_url, package_version in cur.fetchall()
-        ]
-    }
 
     with open("/dbt/packages.yml", "w") as f:
-        f.write(json.dumps(packages))
+        f.write(json.dumps(cur.fetchone()[0]))
 
     subprocess.run(["dbt", "deps", "--profiles-dir", ".dbt"])
     subprocess.run(["dbt", "run",  "--profiles-dir", ".dbt"])
