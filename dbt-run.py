@@ -63,4 +63,4 @@ while True:
 
     subprocess.run(["dbt", "deps", "--profiles-dir", ".dbt"])
     subprocess.run(["dbt", "run",  "--profiles-dir", ".dbt"])
-    time.sleep(5)
+    time.sleep(int(os.getenv("DATAEMON_INTERVAL") or 5))
