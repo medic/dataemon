@@ -17,5 +17,6 @@ RUN apt-get update \
 WORKDIR /dbt/
 COPY dbt-run.py dbt-run.py
 COPY .dbt .dbt
+COPY dbt_project.yml dbt_project.yml
 
 CMD ["python3", "/dbt/dbt-run.py"]
