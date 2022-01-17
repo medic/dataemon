@@ -15,6 +15,7 @@ RUN apt-get update \
     && pip install dbt-core dbt-postgres
 
 WORKDIR /dbt/
-COPY . .
+COPY dbt-run.py dbt-run.py
+COPY .dbt .dbt
 
 CMD ["python3", "/dbt/dbt-run.py"]

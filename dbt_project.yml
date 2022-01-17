@@ -3,7 +3,7 @@ version: '0.0.1'
 config-version: 2
 profile: 'default'
 
-require-dbt-version: [">=0.20.0", "<=1.0.0"]
+require-dbt-version: [">=0.20.0"]
 
 config-version: 2
 
