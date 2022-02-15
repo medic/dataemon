@@ -14,7 +14,7 @@ for attempt in range(5):
             f"dbname={os.getenv('POSTGRES_DB')} "
             f"user={os.getenv('POSTGRES_USER')} "
             f"password={os.getenv('POSTGRES_PASSWORD')} "
-            f"host=postgres port=5432"
+            f"host={os.getenv('POSTGRES_HOST') or 'postgres'} port=5432"
         )
     except psycopg2.OperationalError as e:
         print('Unable to connect!\n{0}').format(e)
