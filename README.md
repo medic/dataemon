@@ -11,7 +11,5 @@ See [docker-compose.yml](./docker-compose.yml) for standard usage. All configura
 Adding package for execution in daemon,
 
 ```
-INSERT INTO $(POSTGRES_SCHEMA)._dataemon VALUES (
-    NOW(), 'https://github.com/url/of/package.git', 'either-a-branch-or-commit'
-)
+INSERT INTO $(POSTGRES_SCHEMA)._dataemon (packages) VALUES ('{"packages": [{"git": "....", "revision": "..."}]}')
 ```
