@@ -7,21 +7,24 @@ import subprocess
 from urllib.parse import urlparse
 
 
-for attempt in range(5):
-    time.sleep(3)
-    try:
-        conn = psycopg2.connect(
-            f"dbname={os.getenv('POSTGRES_DB')} "
-            f"user={os.getenv('POSTGRES_USER')} "
-            f"password={os.getenv('POSTGRES_PASSWORD')} "
-            f"host={os.getenv('POSTGRES_HOST') or 'postgres'} port=5432"
-        )
-    except psycopg2.OperationalError as e:
-        print('Unable to connect!', e)
-        conn = None
-    else:
-        break
+def connection():
+    for attempt in range(5):
+        time.sleep(3)
+        try:
+            return psycopg2.connect(
+                f"dbname={os.getenv('POSTGRES_DB')} "
+                f"user={os.getenv('POSTGRES_USER')} "
+                f"password={os.getenv('POSTGRES_PASSWORD')} "
+                f"host={os.getenv('POSTGRES_HOST') or 'postgres'} port=5432"
+            )
+        except psycopg2.OperationalError as e:
+            print('Unable to connect!', e)
+        else:
+            break
+    return None
 
+
+conn = connection()
 if conn is None:
     exit(1)
 
@@ -53,6 +56,9 @@ if init_package.scheme in ["http", "https"]:
 
 
 while True:
+    if conn.closed:
+        conn = connection()
+
     with conn.cursor() as cur:
         cur.execute(f"""
             SELECT packages
