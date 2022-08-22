@@ -15,7 +15,8 @@ def connection():
                 f"dbname={os.getenv('POSTGRES_DB')} "
                 f"user={os.getenv('POSTGRES_USER')} "
                 f"password={os.getenv('POSTGRES_PASSWORD')} "
-                f"host={os.getenv('POSTGRES_HOST') or 'postgres'} port={os.getenv('POSTGRES_PORT') or '5432'}"
+                f"host={os.getenv('POSTGRES_HOST') or 'postgres'} "
+                f"port={os.getenv('POSTGRES_PORT') or '5432'} "
             )
         except psycopg2.OperationalError as e:
             print('Unable to connect!', e)
