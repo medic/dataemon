@@ -9,7 +9,7 @@ FROM ubuntu AS release
 
 RUN apt-get update \
     && apt-get install -y git libpq-dev python3-dev python3-pip postgresql-client \
-    && apt-get remove -y python-cffi \
+    && apt-get remove -y python3-cffi \
     && pip install --upgrade cffi \
     && pip install cryptography~=3.4 \
     && pip install dbt-core dbt-postgres
