@@ -1,7 +1,7 @@
 name: Publish Docker image
 on:
-  push:
-    tags: ['v*']
+  [push, pull_request]
+
 env:
   DOCKER_HUB_USER: dockermedic
   DOCKER_NAMESPACE: medicmobile
