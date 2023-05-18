@@ -31,4 +31,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: medicmobile/dataemon:${{ env.BUILD_TIMESTAMP }}
+          tags: medicmobile/dataemon:latest
