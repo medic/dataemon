@@ -5,7 +5,7 @@ on:
 env:
   DOCKER_HUB_USER: dockermedic
   DOCKER_NAMESPACE: medicmobile
-  DOCKER_REPOSITORY: dockermedic/dataemon
+  DOCKER_REPOSITORY: dataemon
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
