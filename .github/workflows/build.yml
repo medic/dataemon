@@ -1,32 +1,33 @@
 name: Publish Docker image
-on:
-  [push, pull_request]
+on: [push, pull_request]
 
-env:
-  DOCKER_HUB_USER: dockermedic
-  DOCKER_NAMESPACE: medicmobile
-  DOCKER_REPOSITORY: dataemon
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
+      - name: Build timestamp
+        id: timestamp
+        run: echo "BUILD_TIMESTAMP=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: Log in to Docker Hub
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ env.DOCKER_HUB_USER }}
-          password: ${{ secrets.DOCKER_HUB_PASS }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.DOCKER_NAMESPACE }}/${{ env.DOCKER_REPOSITORY }}
-      - name: Build and push Docker image
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push openhim-mediator
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: .
           push: true
-          ttags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: medicmobile/dataemon:${{ env.BUILD_TIMESTAMP }}
