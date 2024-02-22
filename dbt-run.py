@@ -25,6 +25,15 @@ def connection():
     raise Exception("Could not connect to postgres")
 
 
+# Create schema
+with connection() as conn:
+    with conn.cursor() as cur:
+        cur.execute(f"""
+            CREATE SCHEMA IF NOT EXISTS 
+            {os.getenv('POSTGRES_SCHEMA')}
+        """)
+    conn.commit()
+
 with connection() as conn:
     with conn.cursor() as cur:
         cur.execute(f"""
